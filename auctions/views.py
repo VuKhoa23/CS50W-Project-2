@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User, Category, Listing, CommentOnListing
+from .models import User, Category, Listing, CommentOnListing, Bid
 
 
 def index(request):
@@ -99,6 +99,8 @@ def filter_category(request):
     
 def listing_details(request, id):
     listing = Listing.objects.get(id=id)
+    comments = listing.listing_comments.all()
+    placed_bid = listing.placed_bid
     if request.user in listing.watchlist.all():
         is_in_watchlist = True
     else:
@@ -106,7 +108,9 @@ def listing_details(request, id):
     return render(request, "auctions/listing-details.html",{
         "id": id,
         "listing": listing,
-        "is_in_watchlist": is_in_watchlist
+        "is_in_watchlist": is_in_watchlist,
+        "comments": comments,
+        "placed_bid": placed_bid,
     })
 
 def remove_watchlist(request, id):
@@ -138,3 +142,29 @@ def add_comment(request, id):
         commentObj.save()
 
         return HttpResponseRedirect(reverse("listing-details", args=(id, )))
+    
+def place_bid(request, id):
+     if request.method == "POST":
+        print('Hello')
+        target_user = request.user
+        target_listing = Listing.objects.get(id=id)
+        new_bid_price = float(request.POST["bid_price"])
+        placed_bid = target_listing.placed_bid
+        new_bid = Bid(user = target_user, bid_price = new_bid_price)
+        new_bid.save()
+        if placed_bid == None:
+            if new_bid_price > target_listing.price:
+                target_listing.placed_bid = new_bid
+                target_listing.save()
+                return HttpResponseRedirect(reverse("listing-details", args=(id, )))
+            else:
+                return HttpResponseRedirect(reverse("listing-details", args=(id, )))
+        elif placed_bid.bid_price < new_bid_price:
+            target_listing.placed_bid = new_bid
+            target_listing.save()
+            return HttpResponseRedirect(reverse("listing-details", args=(id, )))
+        else:
+            return HttpResponseRedirect(reverse("listing-details", args=(id, )))
+
+
+

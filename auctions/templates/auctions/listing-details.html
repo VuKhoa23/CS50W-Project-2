@@ -17,8 +17,18 @@
 <h2>{{listing.name}}</h2>
 <img src="{{listing.img}}" alt="listing-img" style="width: 200px" />
 <h4>{{listing.description}}</h4>
-<h3>${{listing.price }}</h3>
-<button type="submit" class="btn btn-success">Place Bid</button>
+<hr />
+<h3>Starting price: ${{listing.price }}</h3>
+<h3>Current bid: {{listing.placed_bid}}</h3>
+
+{% if user.is_authenticated %}
+<form action="{% url 'place-bid' listing.id%}" method="POST">
+  {% csrf_token %}
+  <input type="number" name="bid_price" />
+  <button type="submit" class="btn btn-success">Place Bid</button>
+</form>
+
+{% endif %}
 <h3>Details</h3>
 
 <ul>
@@ -46,8 +56,18 @@
   {% endif %}
 </div>
 <h3>
-  Comments:
-
+  {% for comment in comments %}
+  <label for="comment">{{comment.author}} commented</label>
+  <textarea
+    class="form-control"
+    id="comment"
+    rows="3"
+    style="background-color: lightgray"
+    readonly
+  >
+{{comment.comment}}</textarea
+  >
+  {% endfor %}
   <h3 />
   {%endblock%}
 </h3>
