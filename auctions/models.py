@@ -25,4 +25,8 @@ class Listing(models.Model):
 class CommentOnListing(models.Model):
      author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null = True, related_name='user_comments')
      listing = models.ForeignKey(Listing, on_delete=models.CASCADE, blank=True, null = True, related_name='listing_comments')
+     comment = models.TextField(max_length=600)
+
+     def __str__(self):
+          return f"{self.author} : {self.comment}"
     

@@ -25,4 +25,29 @@
   <li>Listed by: <strong>{{listing.listedBy}}</strong></li>
   <li>Category: <strong>{{listing.category}}</strong></li>
 </ul>
-{%endblock%}
+
+<div>
+  {% if user.is_authenticated %}
+
+  <div class="form-group">
+    <form action="{% url 'add-comment' listing.id %}" method="post">
+      {% csrf_token%}
+      <label for="comment">Leave a comment</label>
+      <textarea
+        class="form-control"
+        id="comment"
+        name="comment"
+        rows="3"
+      ></textarea>
+      <button type="submit" class="btn btn-success">Submit</button>
+    </form>
+  </div>
+
+  {% endif %}
+</div>
+<h3>
+  Comments:
+
+  <h3 />
+  {%endblock%}
+</h3>

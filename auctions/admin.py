@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import User, Listing, Category
+from .models import User, Listing, Category, CommentOnListing
 # Register your models here.
 
 class ListingAdmin(admin.ModelAdmin):
@@ -8,3 +8,4 @@ class ListingAdmin(admin.ModelAdmin):
 admin.site.register(User)
 admin.site.register(Listing, ListingAdmin)
 admin.site.register(Category)
+admin.site.register(CommentOnListing)
