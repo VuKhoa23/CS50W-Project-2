@@ -96,3 +96,34 @@ def filter_category(request):
             "listings": listings,
             "categories": categories
         })
+    
+def listing_details(request, id):
+    listing = Listing.objects.get(id=id)
+    if request.user in listing.watchlist.all():
+        is_in_watchlist = True
+    else:
+        is_in_watchlist = False
+    return render(request, "auctions/listing-details.html",{
+        "id": id,
+        "listing": listing,
+        "is_in_watchlist": is_in_watchlist
+    })
+
+def remove_watchlist(request, id):
+    listing = Listing.objects.get(id=id)
+    user = request.user
+    listing.watchlist.remove(user)
+    return HttpResponseRedirect(reverse("listing-details", args=(id, )))
+
+def add_watchlist(request, id):
+    listing = Listing.objects.get(id=id)
+    user = request.user
+    listing.watchlist.add(user)
+    return HttpResponseRedirect(reverse("listing-details", args=(id, )))
+
+def display_watchlist(request):
+    user = request.user
+    listings = user.user_watchlist.all()
+    return render(request, "auctions/watchlist.html",{
+        "listings": listings
+    })

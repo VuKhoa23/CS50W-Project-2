@@ -1,15 +1,5 @@
 {% extends "auctions/layout.html" %} {% block body %}
-<h2>Active Listings</h2>
-
-<form action="{% url 'filter-category' %}" method="get">
-  <label for="category">Filter a category</label>
-  <select name="category" class="form-select">
-    {% for category in categories %}
-    <option value="{{category}}">{{category}}</option>
-    {% endfor %}
-  </select>
-  <input type="submit"></input>
-</form>
+<h2>Watchlist</h2>
 
 <div class="row mx-3">
   {% for listing in listings %}
@@ -24,7 +14,9 @@
       <h5 class="card-title">{{listing.name}}</h5>
       <p class="card-text">{{listing.description}}</p>
       <p class="card-text">{{listing.price}} $</p>
-      <a href="{% url 'listing-details' listing.id %}" class="btn btn-primary">Details</a>
+      <a href="{% url 'listing-details' listing.id %}" class="btn btn-primary"
+        >Details</a
+      >
     </div>
   </div>
 

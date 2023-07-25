@@ -18,6 +18,11 @@ class Listing(models.Model):
     isListed= models.BooleanField(default=True)
     listedBy = models.ForeignKey(User, on_delete=models.CASCADE, blank = True, null = True, related_name='all_listed_items') 
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null = True, related_name='all_products')
-
-    def __str__(self):
+    watchlist = models.ManyToManyField(User, blank = True, null = True, related_name='user_watchlist')
+    def __str__(self):  
         return f"{self.name} listed by {self.listedBy}"
+
+class CommentOnListing(models.Model):
+     author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null = True, related_name='user_comments')
+     listing = models.ForeignKey(Listing, on_delete=models.CASCADE, blank=True, null = True, related_name='listing_comments')
+    
