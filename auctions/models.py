@@ -26,6 +26,7 @@ class Listing(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, blank=True, null = True, related_name='all_products')
     watchlist = models.ManyToManyField(User, blank = True, null = True, related_name='user_watchlist')
     placed_bid = models.ForeignKey(Bid, on_delete=models.CASCADE, blank = True, null = True, related_name="all_placed_bid")
+    is_closed = models.BooleanField(default=False)
     def __str__(self):  
         return f"{self.name} listed by {self.listedBy}"
 

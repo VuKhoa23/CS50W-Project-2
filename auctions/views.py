@@ -98,7 +98,12 @@ def filter_category(request):
         })
     
 def listing_details(request, id):
+    user = request.user
     listing = Listing.objects.get(id=id)
+    is_sold = listing.is_closed
+    close = False
+    if user == listing.listedBy:
+        close = True
     comments = listing.listing_comments.all()
     placed_bid = listing.placed_bid
     if request.user in listing.watchlist.all():
@@ -111,6 +116,8 @@ def listing_details(request, id):
         "is_in_watchlist": is_in_watchlist,
         "comments": comments,
         "placed_bid": placed_bid,
+        "close": close,
+        "is_sold": is_sold
     })
 
 def remove_watchlist(request, id):
@@ -145,7 +152,6 @@ def add_comment(request, id):
     
 def place_bid(request, id):
      if request.method == "POST":
-        print('Hello')
         target_user = request.user
         target_listing = Listing.objects.get(id=id)
         new_bid_price = float(request.POST["bid_price"])
@@ -167,4 +173,9 @@ def place_bid(request, id):
             return HttpResponseRedirect(reverse("listing-details", args=(id, )))
 
 
-
+def close(request, id):
+    print('Closing')
+    target_listing = Listing.objects.get(id=id)
+    target_listing.is_closed = True
+    target_listing.save()
+    return HttpResponseRedirect(reverse("listing-details", args=(id, )))

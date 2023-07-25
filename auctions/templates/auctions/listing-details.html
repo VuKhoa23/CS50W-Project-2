@@ -19,13 +19,29 @@
 <h4>{{listing.description}}</h4>
 <hr />
 <h3>Starting price: ${{listing.price }}</h3>
-<h3>Current bid: {{listing.placed_bid}}</h3>
 
-{% if user.is_authenticated %}
+{% if not is_sold %}
+<h3 style="background-color: lightgray">Current bid: {{listing.placed_bid}}</h3>
+{% elif is_sold and listing.placed_bid.user != None %}
+<h3 style="background-color: lightgreen">
+  Sold to {{listing.placed_bid.user}} for ${{listing.placed_bid.bid_price}}
+</h3>
+{% else %}
+<h3 style="background-color: #ed3b3b">Closed. Owner stop selling the item</h3>
+{% endif %} {% if user.is_authenticated and not close and not is_sold %}
+
 <form action="{% url 'place-bid' listing.id%}" method="POST">
   {% csrf_token %}
   <input type="number" name="bid_price" />
   <button type="submit" class="btn btn-success">Place Bid</button>
+</form>
+
+{% endif %} {% if user.is_authenticated and close and not is_sold %}
+<form action="{% url 'close' listing.id %}" method="POST">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-danger" style="margin-left: 10px">
+    Close
+  </button>
 </form>
 
 {% endif %}
@@ -35,6 +51,8 @@
   <li>Listed by: <strong>{{listing.listedBy}}</strong></li>
   <li>Category: <strong>{{listing.category}}</strong></li>
 </ul>
+
+<hr />
 
 <div>
   {% if user.is_authenticated %}
