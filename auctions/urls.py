@@ -16,4 +16,5 @@ urlpatterns = [
     path("add-comment/<int:id>", views.add_comment, name="add-comment"),
     path("close/<int:id>", views.close, name="close"),
     path("place-bid/<int:id>", views.place_bid, name="place-bid"),
+    path("error/<str:err>", views.error, name="error"),
 ]

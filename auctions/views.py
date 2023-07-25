@@ -159,23 +159,27 @@ def place_bid(request, id):
         new_bid = Bid(user = target_user, bid_price = new_bid_price)
         new_bid.save()
         if placed_bid == None:
-            if new_bid_price > target_listing.price:
+            if new_bid_price >= target_listing.price:
                 target_listing.placed_bid = new_bid
                 target_listing.save()
                 return HttpResponseRedirect(reverse("listing-details", args=(id, )))
             else:
-                return HttpResponseRedirect(reverse("listing-details", args=(id, )))
+                return HttpResponseRedirect(reverse("error", args=("initial-price", )))
         elif placed_bid.bid_price < new_bid_price:
             target_listing.placed_bid = new_bid
             target_listing.save()
             return HttpResponseRedirect(reverse("listing-details", args=(id, )))
         else:
-            return HttpResponseRedirect(reverse("listing-details", args=(id, )))
+            return HttpResponseRedirect(reverse("error", args=("bid-price", )))
 
 
 def close(request, id):
-    print('Closing')
     target_listing = Listing.objects.get(id=id)
     target_listing.is_closed = True
     target_listing.save()
     return HttpResponseRedirect(reverse("listing-details", args=(id, )))
+
+def error(request, err):
+    return render(request, "auctions/bid-error.html",{
+            "err": err,
+        })

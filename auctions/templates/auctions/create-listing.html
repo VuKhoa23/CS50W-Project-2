@@ -4,19 +4,19 @@
  {% csrf_token %}
   <div class="mb-3">
     <label for="name" class="form-label">Listing Name</label>
-    <input type="text" class="form-control" name="name" />
+    <input required type="text" class="form-control" name="name" />
   </div>
   <div class="mb-3">
     <label for="img" class="form-label">Image's URL</label>
-    <input type="text" class="form-control" name="img" />
+    <input required type="text" class="form-control" name="img" />
   </div>
   <div class="mb-3">
     <label for="description" class="form-label">Give a short description</label>
-    <input type="text" class="form-control" name="description" />
+    <input required type="text" class="form-control" name="description" />
   </div>
   <div class="mb-3">
     <label for="price" class="form-label">Starting price</label>
-    <input type="number" class="form-control" name="price" />
+    <input required type="number" class="form-control" name="price" />
   </div>
   <select name="category" class="form-select">
     {% for category in categories %}

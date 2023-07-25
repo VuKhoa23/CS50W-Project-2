@@ -13,6 +13,7 @@
 
 <div class="row mx-3">
   {% for listing in listings %}
+  {% if not listing.is_closed%}
   <div class="card mx-3" style="width: 18rem">
     <img
       src="{{listing.img}}"
@@ -28,6 +29,6 @@
     </div>
   </div>
 
-  {% empty %} {% endfor %}
+  {% endif %} {% endfor %}
 </div>
 {%endblock%}
