@@ -1,5 +1,11 @@
 {% extends "auctions/layout.html" %} {% block body %}
 
+ {% if user.is_authenticated and listing.is_closed and listing.placed_bid.user == user %} 
+<div class="alert alert-success" role="alert">
+  You won the auction for {{listing.name}}
+</div>
+{% endif %}
+
 <div>
   {% if user.is_authenticated %} {% if is_in_watchlist %}
   <form action="{% url 'remove-watchlist' listing.id %}" method="POST">
