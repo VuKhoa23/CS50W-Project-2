@@ -1,4 +1,4 @@
-# CS50W-Project-0
+# CS50W-Project-2
 ## Project 2 - CS50w: Commerce
 
 A project that I did in my CS50w course
